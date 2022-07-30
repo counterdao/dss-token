@@ -3,9 +3,28 @@ pragma solidity ^0.8.11;
 
 import {svg} from 'hot-chain-svg/SVG.sol';
 import {utils} from 'hot-chain-svg/Utils.sol';
+import {Base64} from 'openzeppelin-contracts/contracts/utils/Base64.sol';
+
+import {Inc} from './token.sol';
+
+library DataURI {
+    function toDataURI(string memory data, string memory mimeType)
+        internal
+        pure
+        returns (string memory)
+    {
+        return
+            string.concat(
+                "data:",
+                mimeType,
+                ";base64,",
+                Base64.encode(abi.encodePacked(data))
+            );
+    }
+}
 
 library Render {
-    function render(uint256 _tokenId, uint256 _supply) internal pure returns (string memory) {
+            function render(uint256 _tokenId, uint256 _supply, Inc memory _price, Inc memory _count) internal pure returns (string memory) {
         return
             string.concat(
                 '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" style="background:#7CC3B3">',
@@ -41,7 +60,7 @@ library Render {
                                 svg.prop('href', '#top')
                             ),
                             string.concat(
-                                svg.cdata('Inc 0x890a7C660e4B604614B511FD35E287a4A599422a | net: 0 | tab: 0 | tax: 0 | num: 0 | hop: 1'),
+                                formatInc(_count),
                                 svg.el(
                                     'animate',
                                     string.concat(
@@ -82,7 +101,18 @@ library Render {
                         svg.prop('font-size', '20'),
                         svg.prop('fill', 'white')
                     ),
-                    string.concat(utils.uint2str(_tokenId), "/", utils.uint2str(_supply))
+                    string.concat(utils.uint2str(_tokenId), " / ", utils.uint2str(_supply))
+                ),
+                svg.text(
+                    string.concat(
+                        svg.prop('x', '50%'),
+                        svg.prop('y', '80%'),
+                        svg.prop('text-anchor', 'middle'),
+                        svg.prop('font-family', 'Helvetica Neue, Helvetica, Arial, sans-serif'),
+                        svg.prop('font-size', '20'),
+                        svg.prop('fill', 'white')
+                    ),
+                    utils.uint2str(_count.net)
                 ),
                 svg.text(
                     string.concat(
@@ -98,7 +128,7 @@ library Render {
                                 svg.prop('href', '#bottom')
                             ),
                             string.concat(
-                                svg.cdata('Inc 0x9AfB089Dc710507776c00eB0877133711196d91F | net: 0 | tab: 0 | tax: 0 | num: 0 | hop: 0'),
+                                formatInc(_price),
                                 svg.el(
                                     'animate',
                                     string.concat(
@@ -117,5 +147,22 @@ library Render {
                 ),
                 '</svg>'
             );
+    }
+
+    function formatInc(Inc memory inc) internal pure returns (string memory) {
+        return svg.cdata(string.concat(
+            'Inc ',
+            '0x9AfB089Dc710507776c00eB0877133711196d91F',
+            ' | net: ',
+            utils.uint2str(inc.net),
+            ' | tab: ',
+            utils.uint2str(inc.tab),
+            ' | tax: ',
+            utils.uint2str(inc.tax),
+            ' | num: ',
+            utils.uint2str(inc.num),
+            ' | hop: ',
+            utils.uint2str(inc.hop)
+        ));
     }
 }
