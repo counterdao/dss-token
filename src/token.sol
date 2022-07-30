@@ -8,7 +8,15 @@ import {FixedPointMathLib} from "solmate/utils/FixedPointMathLib.sol";
 import {Render, DataURI} from "./render.sol";
 
 interface SumLike {
-    function incs(address) external view returns (uint256,uint256,uint256,uint256,uint256);
+    function incs(address)
+        external
+        view
+        returns (uint256, uint256, uint256, uint256, uint256);
+}
+
+interface CTRLike {
+    function balanceOf(address) external view returns (uint256);
+    function push(address, uint256) external;
 }
 
 struct Inc {
@@ -34,6 +42,7 @@ contract DSSToken is ERC721 {
     DSSLike public immutable dss;
     DSSLike public immutable coins;
     DSSLike public immutable price;
+    CTRLike public immutable ctr;
 
     address public owner;
 
@@ -52,10 +61,11 @@ contract DSSToken is ERC721 {
         _;
     }
 
-    constructor(address _dss) ERC721("CounterDAO", "++") {
+    constructor(address _dss, address _ctr) ERC721("CounterDAO", "++") {
         owner = msg.sender;
 
         dss = DSSLike(_dss);
+        ctr = CTRLike(_ctr);
 
         coins = DSSLike(dss.build("coins", address(0)));
         price = DSSLike(dss.build("price", address(0)));
@@ -80,15 +90,22 @@ contract DSSToken is ERC721 {
         _count.bless();
         _count.use();
 
+        _give(msg.sender, 100 * WAD);
         _safeMint(msg.sender, id);
     }
 
     function hike() external {
-        if (price.see() < 100) price.hit();
+        if (price.see() < 100) {
+            price.hit();
+            _give(msg.sender, 10 * WAD);
+        }
     }
 
     function drop() external {
-        if (price.see() > 0) price.dip();
+        if (price.see() > 0) {
+            price.dip();
+            _give(msg.sender, 10 * WAD);
+        }
     }
 
     function cost() public view returns (uint256) {
@@ -117,18 +134,19 @@ contract DSSToken is ERC721 {
 
     function inc(address guy) public view returns (Inc memory) {
         SumLike sum = SumLike(dss.sum());
-        (uint256 net, uint256 tab, uint256 tax, uint256 num, uint256 hop) = sum.incs(guy);
-        return Inc({
-            guy: guy,
-            net: net,
-            tab: tab,
-            tax: tax,
-            num: num,
-            hop: hop
-        });
+        (uint256 net, uint256 tab, uint256 tax, uint256 num, uint256 hop) =
+            sum.incs(guy);
+        return Inc(guy, net, tab, tax, num, hop);
     }
 
-    function tokenURI(uint256 tokenId) public view virtual override exists(tokenId) returns (string memory) {
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        exists(tokenId)
+        returns (string memory)
+    {
         return tokenJSON(tokenId).toDataURI("application/json");
     }
 
@@ -156,4 +174,7 @@ contract DSSToken is ERC721 {
         return Render.render(tokenId, coins.see(), countInc, priceInc);
     }
 
+    function _give(address dst, uint256 wad) internal {
+        if (ctr.balanceOf(address(this)) >= wad) ctr.push(dst, wad);
+    }
 }
