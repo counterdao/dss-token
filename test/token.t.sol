@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity >=0.6.12;
 
 import "forge-std/Test.sol";
@@ -18,7 +18,7 @@ import {ERC20} from "solmate/tokens/ERC20.sol";
 
 contract MockCTR is ERC20 {
     constructor() ERC20("CounterDAO", "CTR", 18) {
-        _mint(msg.sender, 100000 ether);
+        _mint(msg.sender, 100_000 ether);
     }
 
     function push(address dst, uint256 wad) external {
