@@ -51,7 +51,7 @@ library Render {
             _svg,
             '", "attributes": ',
             attributes(_count),
-            '"}'
+            '}'
         );
     }
 
