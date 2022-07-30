@@ -44,6 +44,8 @@ contract DSSTokenTest is Test, ERC721TokenReceiver {
     address alice = mkaddr("alice");
     address eve   = mkaddr("eve");
 
+    receive() external payable {}
+
     function mkaddr(string memory name) public returns (address addr) {
         addr = address(uint160(uint256(keccak256(abi.encodePacked(name)))));
         vm.label(addr, name);
@@ -273,7 +275,7 @@ contract DSSTokenTest is Test, ERC721TokenReceiver {
 
     function test_mint_reverts_insufficient_payment() public {
         vm.expectRevert(
-            abi.encodeWithSelector(DSSToken.InsufficientPayment.selector, 0, 0.01 ether)
+            abi.encodeWithSelector(DSSToken.WrongPayment.selector, 0, 0.01 ether)
         );
         token.mint{value: 0}();
     }
@@ -364,5 +366,38 @@ contract DSSTokenTest is Test, ERC721TokenReceiver {
     function test_token_svg_reverts_unminted_token() public {
         vm.expectRevert("NOT_MINTED");
         token.tokenSVG(1);
+    }
+
+    function test_owner_can_swap() public {
+        token.swap(alice);
+
+        assertEq(token.owner(), alice);
+
+        vm.expectRevert(DSSToken.Forbidden.selector);
+        token.swap(me);
+    }
+
+    function test_non_owner_cannot_swap() public {
+        vm.prank(eve);
+        vm.expectRevert(DSSToken.Forbidden.selector);
+        token.swap(eve);
+    }
+
+    function test_owner_can_pull() public {
+        uint256 balanceBefore = payable(me).balance;
+
+        vm.deal(alice, 0.03 ether);
+        vm.startPrank(alice);
+
+        token.mint{value: 0.01 ether}();
+        token.mint{value: 0.01 ether}();
+        token.mint{value: 0.01 ether}();
+
+        vm.stopPrank();
+
+        token.pull(me);
+
+        uint256 balanceAfter = payable(me).balance;
+        assertEq(balanceAfter - balanceBefore, 0.03 ether);
     }
 }

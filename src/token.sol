@@ -32,8 +32,9 @@ contract DSSToken is ERC721 {
     using FixedPointMathLib for uint256;
     using DataURI for string;
 
-    error InsufficientPayment(uint256 sent, uint256 cost);
+    error WrongPayment(uint256 sent, uint256 cost);
     error Forbidden();
+    error PullFailed();
 
     uint256 constant WAD        = 1    ether;
     uint256 constant BASE_PRICE = 0.01 ether;
@@ -80,7 +81,7 @@ contract DSSToken is ERC721 {
     function mint() external payable {
         uint256 _cost = cost();
         if (msg.value != _cost) {
-            revert InsufficientPayment(msg.value, _cost);
+            revert WrongPayment(msg.value, _cost);
         }
 
         coins.hit();
@@ -122,6 +123,15 @@ contract DSSToken is ERC721 {
 
     function dip(uint256 tokenId) external owns(tokenId) {
         count(tokenId).dip();
+    }
+
+    function pull(address dst) external auth {
+        (bool ok,) = payable(dst).call{ value: address(this).balance }("");
+        if (!ok) revert PullFailed();
+    }
+
+    function swap(address guy) external auth {
+        owner = guy;
     }
 
     function see(uint256 tokenId) external view returns (uint256) {
