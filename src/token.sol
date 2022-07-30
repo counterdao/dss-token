@@ -166,11 +166,8 @@ contract DSSToken is ERC721 {
         exists(tokenId)
         returns (string memory)
     {
-        return string.concat(
-            '{"name": "CounterDAO", "description": "I frobbed an inc and all I got was this lousy token", "image": "',
-            tokenSVG(tokenId).toDataURI("image/svg+xml"),
-            '"}'
-        );
+        Inc memory countInc = inc(address(count(tokenId)));
+        return Render.json(tokenId, tokenSVG(tokenId).toDataURI("image/svg+xml"), countInc);
     }
 
     function tokenSVG(uint256 tokenId)
@@ -181,7 +178,7 @@ contract DSSToken is ERC721 {
     {
         Inc memory countInc = inc(address(count(tokenId)));
         Inc memory priceInc = inc(address(price));
-        return Render.render(tokenId, coins.see(), countInc, priceInc);
+        return Render.image(tokenId, coins.see(), countInc, priceInc);
     }
 
     function _give(address dst, uint256 wad) internal {

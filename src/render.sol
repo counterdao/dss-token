@@ -4,6 +4,7 @@ pragma solidity ^0.8.11;
 import {svg} from "hot-chain-svg/SVG.sol";
 import {utils} from "hot-chain-svg/Utils.sol";
 import {Base64} from "openzeppelin-contracts/contracts/utils/Base64.sol";
+import {Strings} from "openzeppelin-contracts/contracts/utils/Strings.sol";
 
 import {Inc} from "./token.sol";
 
@@ -20,7 +21,54 @@ library DataURI {
 }
 
 library Render {
-    function render(
+    function json(uint256 _tokenId, string memory _svg, Inc memory _count)
+        internal
+        pure
+        returns (string memory)
+    {
+        return string.concat(
+            '{"name": "CounterDAO',
+            " #",
+            utils.uint2str(_tokenId),
+            '", "description": "I frobbed an inc and all I got was this lousy token", "image": "',
+            _svg,
+            '", "attributes": ',
+            attributes(_count),
+            '"}'
+        );
+    }
+
+    function attributes(Inc memory inc) internal pure returns (string memory) {
+        return string.concat(
+            "[",
+            attribute("net", inc.net),
+            ",",
+            attribute("tab", inc.tab),
+            ",",
+            attribute("tax", inc.tax),
+            ",",
+            attribute("num", inc.num),
+            ",",
+            attribute("hop", inc.hop),
+            "]"
+        );
+    }
+
+    function attribute(string memory name, uint256 value)
+        internal
+        pure
+        returns (string memory)
+    {
+        return string.concat(
+            '{"trait_type": "',
+            name,
+            '", "value": "',
+            utils.uint2str(value),
+            '", "display_type": "number"}'
+        );
+    }
+
+    function image(
         uint256 _tokenId,
         uint256 _supply,
         Inc memory _price,
@@ -31,7 +79,7 @@ library Render {
         returns (string memory)
     {
         return string.concat(
-            '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" style="background:#7CC3B3">',
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="background:#7CC3B3;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;">',
             svg.el(
                 "path",
                 string.concat(
@@ -59,7 +107,7 @@ library Render {
             svg.text(
                 string.concat(
                     svg.prop("dominant-baseline", "middle"),
-                    svg.prop("font-family", "monospace"),
+                    svg.prop("font-family", "Menlo, monospace"),
                     svg.prop("font-size", "9"),
                     svg.prop("fill", "white")
                 ),
@@ -91,7 +139,6 @@ library Render {
                     svg.prop("y", "45%"),
                     svg.prop("text-anchor", "middle"),
                     svg.prop("dominant-baseline", "middle"),
-                    svg.prop("font-family", "Helvetica Neue, Helvetica, Arial, sans-serif"),
                     svg.prop("font-size", "150"),
                     svg.prop("font-weight", "bold"),
                     svg.prop("fill", "white")
@@ -103,7 +150,6 @@ library Render {
                     svg.prop("x", "50%"),
                     svg.prop("y", "70%"),
                     svg.prop("text-anchor", "middle"),
-                    svg.prop("font-family", "Helvetica Neue, Helvetica, Arial, sans-serif"),
                     svg.prop("font-size", "20"),
                     svg.prop("fill", "white")
                 ),
@@ -114,7 +160,6 @@ library Render {
                     svg.prop("x", "50%"),
                     svg.prop("y", "80%"),
                     svg.prop("text-anchor", "middle"),
-                    svg.prop("font-family", "Helvetica Neue, Helvetica, Arial, sans-serif"),
                     svg.prop("font-size", "20"),
                     svg.prop("fill", "white")
                 ),
@@ -123,7 +168,7 @@ library Render {
             svg.text(
                 string.concat(
                     svg.prop("dominant-baseline", "middle"),
-                    svg.prop("font-family", "monospace"),
+                    svg.prop("font-family", "Menlo, monospace"),
                     svg.prop("font-size", "9"),
                     svg.prop("fill", "white")
                 ),
@@ -157,7 +202,7 @@ library Render {
         return svg.cdata(
             string.concat(
                 "Inc ",
-                "0x9AfB089Dc710507776c00eB0877133711196d91F",
+                Strings.toHexString(uint160(inc.guy), 20),
                 " | net: ",
                 utils.uint2str(inc.net),
                 " | tab: ",

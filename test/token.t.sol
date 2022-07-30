@@ -75,7 +75,9 @@ contract DSSTokenTest is Test, ERC721TokenReceiver {
 
         ctr.push(address(token), 100000 ether);
     }
+}
 
+contract TestToken is DSSTokenTest {
     function test_token_has_name() public {
         assertEq(token.name(), "CounterDAO");
     }
@@ -329,38 +331,14 @@ contract DSSTokenTest is Test, ERC721TokenReceiver {
         assertEq(price, 0);
     }
 
-    function xtest_returns_token_uri() public {
-        token.mint{value: 0.01 ether}();
-        assertEq(
-            token.tokenURI(1),
-            "data:application/json;base64,eyJuYW1lIjogIkNvdW50ZXJEQU8iLCAiZGVzY3JpcHRpb24iOiAiSSBmcm9iYmVkIGFuIEluYyBhbmQgYWxsIEkgZ290IHdhcyB0aGlzIGxvdXN5IHRva2VuIiwgImltYWdlIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIZHBaSFJvUFNJek1EQWlJR2hsYVdkb2REMGlNekF3SWlCemRIbHNaVDBpWW1GamEyZHliM1Z1WkRvak4wTkRNMEl6SWo0OGNHRjBhQ0JwWkQwaWRHOXdJaUJrUFNKTklERXdJREV3SUVnZ01qZ3dJR0V4TUN3eE1DQXdJREFnTVNBeE1Dd3hNQ0JXSURJNE1DQmhNVEFzTVRBZ01DQXdJREVnTFRFd0xERXdJRWdnTWpBZ1lURXdMREV3SURBZ01DQXhJQzB4TUN3dE1UQWdWaUF4TUNCNklpQm1hV3hzUFNJak4wTkRNMEl6SWlBK1BDOXdZWFJvUGp4d1lYUm9JR2xrUFNKaWIzUjBiMjBpSUdROUlrMGdNamt3SURJNU1DQklJREl3SUdFeE1Dd3hNQ0F3SURBZ01TQXRNVEFzTFRFd0lGWWdNakFnWVRFd0xERXdJREFnTUNBeElERXdMQzB4TUNCSUlESTRNQ0JoTVRBc01UQWdNQ0F3SURFZ01UQXNNVEFnVmlBeU9UQWdlaUlnWm1sc2JEMGlJemREUXpOQ015SWdQand2Y0dGMGFENDhkR1Y0ZENCa2IyMXBibUZ1ZEMxaVlYTmxiR2x1WlQwaWJXbGtaR3hsSWlCbWIyNTBMV1poYldsc2VUMGliVzl1YjNOd1lXTmxJaUJtYjI1MExYTnBlbVU5SWpraUlHWnBiR3c5SW5kb2FYUmxJaUErUEhSbGVIUlFZWFJvSUdoeVpXWTlJaU4wYjNBaUlENDhJVnREUkVGVVFWdEpibU1nTUhnNE9UQmhOME0yTmpCbE5FSTJNRFEyTVRSQ05URXhSa1F6TlVVeU9EZGhORUUxT1RrME1qSmhJSHdnYm1WME9pQXdJSHdnZEdGaU9pQXdJSHdnZEdGNE9pQXdJSHdnYm5WdE9pQXdJSHdnYUc5d09pQXhYVjArUEdGdWFXMWhkR1VnWVhSMGNtbGlkWFJsVG1GdFpUMGljM1JoY25SUFptWnpaWFFpSUdaeWIyMDlJakFsSWlCMGJ6MGlNVEF3SlNJZ1pIVnlQU0l4TWpCeklpQmlaV2RwYmowaU1ITWlJSEpsY0dWaGRFTnZkVzUwUFNKcGJtUmxabWx1YVhSbElpQStQQzloYm1sdFlYUmxQand2ZEdWNGRGQmhkR2crUEM5MFpYaDBQangwWlhoMElIZzlJalV3SlNJZ2VUMGlORFVsSWlCMFpYaDBMV0Z1WTJodmNqMGliV2xrWkd4bElpQmtiMjFwYm1GdWRDMWlZWE5sYkdsdVpUMGliV2xrWkd4bElpQm1iMjUwTFdaaGJXbHNlVDBpU0dWc2RtVjBhV05oSUU1bGRXVXNJRWhsYkhabGRHbGpZU3dnUVhKcFlXd3NJSE5oYm5NdGMyVnlhV1lpSUdadmJuUXRjMmw2WlQwaU1UVXdJaUJtYjI1MExYZGxhV2RvZEQwaVltOXNaQ0lnWm1sc2JEMGlkMmhwZEdVaUlENDhJVnREUkVGVVFWc3JLMTFkUGp3dmRHVjRkRDQ4ZEdWNGRDQjRQU0kxTUNVaUlIazlJamN3SlNJZ2RHVjRkQzFoYm1Ob2IzSTlJbTFwWkdSc1pTSWdabTl1ZEMxbVlXMXBiSGs5SWtobGJIWmxkR2xqWVNCT1pYVmxMQ0JJWld4MlpYUnBZMkVzSUVGeWFXRnNMQ0J6WVc1ekxYTmxjbWxtSWlCbWIyNTBMWE5wZW1VOUlqSXdJaUJtYVd4c1BTSjNhR2wwWlNJZ1BqRXZNVHd2ZEdWNGRENDhkR1Y0ZENCa2IyMXBibUZ1ZEMxaVlYTmxiR2x1WlQwaWJXbGtaR3hsSWlCbWIyNTBMV1poYldsc2VUMGliVzl1YjNOd1lXTmxJaUJtYjI1MExYTnBlbVU5SWpraUlHWnBiR3c5SW5kb2FYUmxJaUErUEhSbGVIUlFZWFJvSUdoeVpXWTlJaU5pYjNSMGIyMGlJRDQ4SVZ0RFJFRlVRVnRKYm1NZ01IZzVRV1pDTURnNVJHTTNNVEExTURjM056WmpNREJsUWpBNE56Y3hNek0zTVRFeE9UWmtPVEZHSUh3Z2JtVjBPaUF3SUh3Z2RHRmlPaUF3SUh3Z2RHRjRPaUF3SUh3Z2JuVnRPaUF3SUh3Z2FHOXdPaUF3WFYwK1BHRnVhVzFoZEdVZ1lYUjBjbWxpZFhSbFRtRnRaVDBpYzNSaGNuUlBabVp6WlhRaUlHWnliMjA5SWpBbElpQjBiejBpTVRBd0pTSWdaSFZ5UFNJeE1qQnpJaUJpWldkcGJqMGlNSE1pSUhKbGNHVmhkRU52ZFc1MFBTSnBibVJsWm1sdWFYUmxJaUErUEM5aGJtbHRZWFJsUGp3dmRHVjRkRkJoZEdnK1BDOTBaWGgwUGp3dmMzWm5QZz09In0="
-        );
-    }
-
     function test_token_uri_reverts_unminted_token() public {
         vm.expectRevert("NOT_MINTED");
         token.tokenURI(1);
     }
 
-    function xtest_returns_token_json() public {
-        token.mint{value: 0.01 ether}();
-        assertEq(
-            token.tokenJSON(1),
-            '{"name": "CounterDAO", "description": "I frobbed an Inc and all I got was this lousy token", "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBzdHlsZT0iYmFja2dyb3VuZDojN0NDM0IzIj48cGF0aCBpZD0idG9wIiBkPSJNIDEwIDEwIEggMjgwIGExMCwxMCAwIDAgMSAxMCwxMCBWIDI4MCBhMTAsMTAgMCAwIDEgLTEwLDEwIEggMjAgYTEwLDEwIDAgMCAxIC0xMCwtMTAgViAxMCB6IiBmaWxsPSIjN0NDM0IzIiA+PC9wYXRoPjxwYXRoIGlkPSJib3R0b20iIGQ9Ik0gMjkwIDI5MCBIIDIwIGExMCwxMCAwIDAgMSAtMTAsLTEwIFYgMjAgYTEwLDEwIDAgMCAxIDEwLC0xMCBIIDI4MCBhMTAsMTAgMCAwIDEgMTAsMTAgViAyOTAgeiIgZmlsbD0iIzdDQzNCMyIgPjwvcGF0aD48dGV4dCBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjkiIGZpbGw9IndoaXRlIiA+PHRleHRQYXRoIGhyZWY9IiN0b3AiID48IVtDREFUQVtJbmMgMHg4OTBhN0M2NjBlNEI2MDQ2MTRCNTExRkQzNUUyODdhNEE1OTk0MjJhIHwgbmV0OiAwIHwgdGFiOiAwIHwgdGF4OiAwIHwgbnVtOiAwIHwgaG9wOiAxXV0+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ic3RhcnRPZmZzZXQiIGZyb209IjAlIiB0bz0iMTAwJSIgZHVyPSIxMjBzIiBiZWdpbj0iMHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiA+PC9hbmltYXRlPjwvdGV4dFBhdGg+PC90ZXh0Pjx0ZXh0IHg9IjUwJSIgeT0iNDUlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiID48IVtDREFUQVsrK11dPjwvdGV4dD48dGV4dCB4PSI1MCUiIHk9IjcwJSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSJ3aGl0ZSIgPjEvMTwvdGV4dD48dGV4dCBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjkiIGZpbGw9IndoaXRlIiA+PHRleHRQYXRoIGhyZWY9IiNib3R0b20iID48IVtDREFUQVtJbmMgMHg5QWZCMDg5RGM3MTA1MDc3NzZjMDBlQjA4NzcxMzM3MTExOTZkOTFGIHwgbmV0OiAwIHwgdGFiOiAwIHwgdGF4OiAwIHwgbnVtOiAwIHwgaG9wOiAwXV0+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ic3RhcnRPZmZzZXQiIGZyb209IjAlIiB0bz0iMTAwJSIgZHVyPSIxMjBzIiBiZWdpbj0iMHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiA+PC9hbmltYXRlPjwvdGV4dFBhdGg+PC90ZXh0Pjwvc3ZnPg=="}'
-        );
-    }
-
     function test_token_json_reverts_unminted_token() public {
         vm.expectRevert("NOT_MINTED");
         token.tokenJSON(1);
-    }
-
-    function xtest_returns_token_svg() public {
-        token.mint{value: 0.01 ether}();
-        assertEq(
-            token.tokenSVG(1),
-            '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" style="background:#7CC3B3"><path id="top" d="M 10 10 H 280 a10,10 0 0 1 10,10 V 280 a10,10 0 0 1 -10,10 H 20 a10,10 0 0 1 -10,-10 V 10 z" fill="#7CC3B3" ></path><path id="bottom" d="M 290 290 H 20 a10,10 0 0 1 -10,-10 V 20 a10,10 0 0 1 10,-10 H 280 a10,10 0 0 1 10,10 V 290 z" fill="#7CC3B3" ></path><text dominant-baseline="middle" font-family="monospace" font-size="9" fill="white" ><textPath href="#top" ><![CDATA[Inc 0x890a7C660e4B604614B511FD35E287a4A599422a | net: 0 | tab: 0 | tax: 0 | num: 0 | hop: 1]]><animate attributeName="startOffset" from="0%" to="100%" dur="120s" begin="0s" repeatCount="indefinite" ></animate></textPath></text><text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="150" font-weight="bold" fill="white" ><![CDATA[++]]></text><text x="50%" y="70%" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="white" >1/1</text><text dominant-baseline="middle" font-family="monospace" font-size="9" fill="white" ><textPath href="#bottom" ><![CDATA[Inc 0x9AfB089Dc710507776c00eB0877133711196d91F | net: 0 | tab: 0 | tax: 0 | num: 0 | hop: 0]]><animate attributeName="startOffset" from="0%" to="100%" dur="120s" begin="0s" repeatCount="indefinite" ></animate></textPath></text></svg>'
-        );
     }
 
     function test_token_svg_reverts_unminted_token() public {
@@ -399,5 +377,31 @@ contract DSSTokenTest is Test, ERC721TokenReceiver {
 
         uint256 balanceAfter = payable(me).balance;
         assertEq(balanceAfter - balanceBefore, 0.03 ether);
+    }
+}
+
+contract TestRender is DSSTokenTest {
+    function test_render_token_uri() public {
+        token.mint{value: 0.01 ether}();
+        assertEq(
+            token.tokenURI(1),
+            "data:application/json;base64,eyJuYW1lIjogIkNvdW50ZXJEQU8gIzEiLCAiZGVzY3JpcHRpb24iOiAiSSBmcm9iYmVkIGFuIGluYyBhbmQgYWxsIEkgZ290IHdhcyB0aGlzIGxvdXN5IHRva2VuIiwgImltYWdlIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIWnBaWGRDYjNnOUlqQWdNQ0F6TURBZ016QXdJaUJ6ZEhsc1pUMGlZbUZqYTJkeWIzVnVaRG9qTjBORE0wSXpPMlp2Ym5RdFptRnRhV3g1T2tobGJIWmxkR2xqWVNCT1pYVmxMQ0JJWld4MlpYUnBZMkVzSUVGeWFXRnNMQ0J6WVc1ekxYTmxjbWxtT3lJK1BIQmhkR2dnYVdROUluUnZjQ0lnWkQwaVRTQXhNQ0F4TUNCSUlESTRNQ0JoTVRBc01UQWdNQ0F3SURFZ01UQXNNVEFnVmlBeU9EQWdZVEV3TERFd0lEQWdNQ0F4SUMweE1Dd3hNQ0JJSURJd0lHRXhNQ3d4TUNBd0lEQWdNU0F0TVRBc0xURXdJRllnTVRBZ2VpSWdabWxzYkQwaUl6ZERRek5DTXlJZ1Bqd3ZjR0YwYUQ0OGNHRjBhQ0JwWkQwaVltOTBkRzl0SWlCa1BTSk5JREk1TUNBeU9UQWdTQ0F5TUNCaE1UQXNNVEFnTUNBd0lERWdMVEV3TEMweE1DQldJREl3SUdFeE1Dd3hNQ0F3SURBZ01TQXhNQ3d0TVRBZ1NDQXlPREFnWVRFd0xERXdJREFnTUNBeElERXdMREV3SUZZZ01qa3dJSG9pSUdacGJHdzlJaU0zUTBNelFqTWlJRDQ4TDNCaGRHZytQSFJsZUhRZ1pHOXRhVzVoYm5RdFltRnpaV3hwYm1VOUltMXBaR1JzWlNJZ1ptOXVkQzFtWVcxcGJIazlJazFsYm14dkxDQnRiMjV2YzNCaFkyVWlJR1p2Ym5RdGMybDZaVDBpT1NJZ1ptbHNiRDBpZDJocGRHVWlJRDQ4ZEdWNGRGQmhkR2dnYUhKbFpqMGlJM1J2Y0NJZ1Bqd2hXME5FUVZSQlcwbHVZeUF3ZURZelpqSTFOekU0TlRRNU1UYzRaR0l5WWpVNU9XSXhaRGxrWmpSbU1EUTBPR0kzTnpVMU1tRWdmQ0J1WlhRNklEQWdmQ0IwWVdJNklEQWdmQ0IwWVhnNklEQWdmQ0J1ZFcwNklEQWdmQ0JvYjNBNklERmRYVDQ4WVc1cGJXRjBaU0JoZEhSeWFXSjFkR1ZPWVcxbFBTSnpkR0Z5ZEU5bVpuTmxkQ0lnWm5KdmJUMGlNQ1VpSUhSdlBTSXhNREFsSWlCa2RYSTlJakV5TUhNaUlHSmxaMmx1UFNJd2N5SWdjbVZ3WldGMFEyOTFiblE5SW1sdVpHVm1hVzVwZEdVaUlENDhMMkZ1YVcxaGRHVStQQzkwWlhoMFVHRjBhRDQ4TDNSbGVIUStQSFJsZUhRZ2VEMGlOVEFsSWlCNVBTSTBOU1VpSUhSbGVIUXRZVzVqYUc5eVBTSnRhV1JrYkdVaUlHUnZiV2x1WVc1MExXSmhjMlZzYVc1bFBTSnRhV1JrYkdVaUlHWnZiblF0YzJsNlpUMGlNVFV3SWlCbWIyNTBMWGRsYVdkb2REMGlZbTlzWkNJZ1ptbHNiRDBpZDJocGRHVWlJRDQ4SVZ0RFJFRlVRVnNySzExZFBqd3ZkR1Y0ZEQ0OGRHVjRkQ0I0UFNJMU1DVWlJSGs5SWpjd0pTSWdkR1Y0ZEMxaGJtTm9iM0k5SW0xcFpHUnNaU0lnWm05dWRDMXphWHBsUFNJeU1DSWdabWxzYkQwaWQyaHBkR1VpSUQ0eElDOGdNVHd2ZEdWNGRENDhkR1Y0ZENCNFBTSTFNQ1VpSUhrOUlqZ3dKU0lnZEdWNGRDMWhibU5vYjNJOUltMXBaR1JzWlNJZ1ptOXVkQzF6YVhwbFBTSXlNQ0lnWm1sc2JEMGlkMmhwZEdVaUlENHdQQzkwWlhoMFBqeDBaWGgwSUdSdmJXbHVZVzUwTFdKaGMyVnNhVzVsUFNKdGFXUmtiR1VpSUdadmJuUXRabUZ0YVd4NVBTSk5aVzVzYnl3Z2JXOXViM053WVdObElpQm1iMjUwTFhOcGVtVTlJamtpSUdacGJHdzlJbmRvYVhSbElpQStQSFJsZUhSUVlYUm9JR2h5WldZOUlpTmliM1IwYjIwaUlENDhJVnREUkVGVVFWdEpibU1nTUhnelltRTBabUl6T1dSa1kyWTNPR1kzTm1ObFpHTmtZekV3TXpVeVlUSTBNR1JpWldSaE5qSTVJSHdnYm1WME9pQXdJSHdnZEdGaU9pQXdJSHdnZEdGNE9pQXdJSHdnYm5WdE9pQXdJSHdnYUc5d09pQXhYVjArUEdGdWFXMWhkR1VnWVhSMGNtbGlkWFJsVG1GdFpUMGljM1JoY25SUFptWnpaWFFpSUdaeWIyMDlJakFsSWlCMGJ6MGlNVEF3SlNJZ1pIVnlQU0l4TWpCeklpQmlaV2RwYmowaU1ITWlJSEpsY0dWaGRFTnZkVzUwUFNKcGJtUmxabWx1YVhSbElpQStQQzloYm1sdFlYUmxQand2ZEdWNGRGQmhkR2crUEM5MFpYaDBQand2YzNablBnPT0iLCAiYXR0cmlidXRlcyI6IFt7InRyYWl0X3R5cGUiOiAibmV0IiwgInZhbHVlIjogIjAiLCAiZGlzcGxheV90eXBlIjogIm51bWJlciJ9LHsidHJhaXRfdHlwZSI6ICJ0YWIiLCAidmFsdWUiOiAiMCIsICJkaXNwbGF5X3R5cGUiOiAibnVtYmVyIn0seyJ0cmFpdF90eXBlIjogInRheCIsICJ2YWx1ZSI6ICIwIiwgImRpc3BsYXlfdHlwZSI6ICJudW1iZXIifSx7InRyYWl0X3R5cGUiOiAibnVtIiwgInZhbHVlIjogIjAiLCAiZGlzcGxheV90eXBlIjogIm51bWJlciJ9LHsidHJhaXRfdHlwZSI6ICJob3AiLCAidmFsdWUiOiAiMSIsICJkaXNwbGF5X3R5cGUiOiAibnVtYmVyIn1dIn0="
+        );
+    }
+
+    function test_render_token_json() public {
+        token.mint{value: 0.01 ether}();
+        assertEq(
+            token.tokenJSON(1),
+            '{"name": "CounterDAO #1", "description": "I frobbed an inc and all I got was this lousy token", "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgMzAwIiBzdHlsZT0iYmFja2dyb3VuZDojN0NDM0IzO2ZvbnQtZmFtaWx5OkhlbHZldGljYSBOZXVlLCBIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmOyI+PHBhdGggaWQ9InRvcCIgZD0iTSAxMCAxMCBIIDI4MCBhMTAsMTAgMCAwIDEgMTAsMTAgViAyODAgYTEwLDEwIDAgMCAxIC0xMCwxMCBIIDIwIGExMCwxMCAwIDAgMSAtMTAsLTEwIFYgMTAgeiIgZmlsbD0iIzdDQzNCMyIgPjwvcGF0aD48cGF0aCBpZD0iYm90dG9tIiBkPSJNIDI5MCAyOTAgSCAyMCBhMTAsMTAgMCAwIDEgLTEwLC0xMCBWIDIwIGExMCwxMCAwIDAgMSAxMCwtMTAgSCAyODAgYTEwLDEwIDAgMCAxIDEwLDEwIFYgMjkwIHoiIGZpbGw9IiM3Q0MzQjMiID48L3BhdGg+PHRleHQgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ik1lbmxvLCBtb25vc3BhY2UiIGZvbnQtc2l6ZT0iOSIgZmlsbD0id2hpdGUiID48dGV4dFBhdGggaHJlZj0iI3RvcCIgPjwhW0NEQVRBW0luYyAweDYzZjI1NzE4NTQ5MTc4ZGIyYjU5OWIxZDlkZjRmMDQ0OGI3NzU1MmEgfCBuZXQ6IDAgfCB0YWI6IDAgfCB0YXg6IDAgfCBudW06IDAgfCBob3A6IDFdXT48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJzdGFydE9mZnNldCIgZnJvbT0iMCUiIHRvPSIxMDAlIiBkdXI9IjEyMHMiIGJlZ2luPSIwcyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiID48L2FuaW1hdGU+PC90ZXh0UGF0aD48L3RleHQ+PHRleHQgeD0iNTAlIiB5PSI0NSUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiID48IVtDREFUQVsrK11dPjwvdGV4dD48dGV4dCB4PSI1MCUiIHk9IjcwJSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyMCIgZmlsbD0id2hpdGUiID4xIC8gMTwvdGV4dD48dGV4dCB4PSI1MCUiIHk9IjgwJSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyMCIgZmlsbD0id2hpdGUiID4wPC90ZXh0Pjx0ZXh0IGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJNZW5sbywgbW9ub3NwYWNlIiBmb250LXNpemU9IjkiIGZpbGw9IndoaXRlIiA+PHRleHRQYXRoIGhyZWY9IiNib3R0b20iID48IVtDREFUQVtJbmMgMHgzYmE0ZmIzOWRkY2Y3OGY3NmNlZGNkYzEwMzUyYTI0MGRiZWRhNjI5IHwgbmV0OiAwIHwgdGFiOiAwIHwgdGF4OiAwIHwgbnVtOiAwIHwgaG9wOiAxXV0+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ic3RhcnRPZmZzZXQiIGZyb209IjAlIiB0bz0iMTAwJSIgZHVyPSIxMjBzIiBiZWdpbj0iMHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiA+PC9hbmltYXRlPjwvdGV4dFBhdGg+PC90ZXh0Pjwvc3ZnPg==", "attributes": [{"trait_type": "net", "value": "0", "display_type": "number"},{"trait_type": "tab", "value": "0", "display_type": "number"},{"trait_type": "tax", "value": "0", "display_type": "number"},{"trait_type": "num", "value": "0", "display_type": "number"},{"trait_type": "hop", "value": "1", "display_type": "number"}]"}'
+        );
+    }
+
+    function test_render_token_svg() public {
+        token.mint{value: 0.01 ether}();
+        assertEq(
+            token.tokenSVG(1),
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" style="background:#7CC3B3;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;"><path id="top" d="M 10 10 H 280 a10,10 0 0 1 10,10 V 280 a10,10 0 0 1 -10,10 H 20 a10,10 0 0 1 -10,-10 V 10 z" fill="#7CC3B3" ></path><path id="bottom" d="M 290 290 H 20 a10,10 0 0 1 -10,-10 V 20 a10,10 0 0 1 10,-10 H 280 a10,10 0 0 1 10,10 V 290 z" fill="#7CC3B3" ></path><text dominant-baseline="middle" font-family="Menlo, monospace" font-size="9" fill="white" ><textPath href="#top" ><![CDATA[Inc 0x63f25718549178db2b599b1d9df4f0448b77552a | net: 0 | tab: 0 | tax: 0 | num: 0 | hop: 1]]><animate attributeName="startOffset" from="0%" to="100%" dur="120s" begin="0s" repeatCount="indefinite" ></animate></textPath></text><text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" font-size="150" font-weight="bold" fill="white" ><![CDATA[++]]></text><text x="50%" y="70%" text-anchor="middle" font-size="20" fill="white" >1 / 1</text><text x="50%" y="80%" text-anchor="middle" font-size="20" fill="white" >0</text><text dominant-baseline="middle" font-family="Menlo, monospace" font-size="9" fill="white" ><textPath href="#bottom" ><![CDATA[Inc 0x3ba4fb39ddcf78f76cedcdc10352a240dbeda629 | net: 0 | tab: 0 | tax: 0 | num: 0 | hop: 1]]><animate attributeName="startOffset" from="0%" to="100%" dur="120s" begin="0s" repeatCount="indefinite" ></animate></textPath></text></svg>'
+        );
     }
 }
