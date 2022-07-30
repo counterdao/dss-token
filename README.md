@@ -10,13 +10,20 @@ makes use of several `DSS` counters:
 - `price` is used to calculate the `mint` price.
 - Each token has its own `count`, accessible to the token owner.
 
-Public functions:
+To `mint` your own `DSSToken`, call `mint` and send ether equal to the current `cost`.
+The base `cost` of of a `DSSToken` is 0.01 ether. Note however that anyone may call
+`hike` and `drop` to modify the `cost`. (Consider using [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to `mint`).
+
+Additionally, `mint`, `hike`, and `drop` will distribute `CTR` governance token to
+the caller if a sufficient balance remains in the `DSSToken` contract.
+
+### Public functions:
 - `cost`: Get the current `mint` price.
 - `mint`: Mint a `DSSToken` to caller.
 - `hike`: Increase `cost` by 10%.
 - `drop`: Decrease `cost` by 10%.
 - `see`: Read a token's counter.
 
-Permissioned functions:
-- `hit`: Increment a token's counter. (Token owner only).
-- `dip`: Decrement a token's counter. (Token owner only).
+### Permissioned functions:
+- `hit`: Increment a token's counter. Token owner only.
+- `dip`: Decrement a token's counter. Token owner only.
