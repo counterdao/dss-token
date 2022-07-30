@@ -57,8 +57,8 @@ contract DSSToken is ERC721 {
 
         dss = DSSLike(_dss);
 
-        coins = DSSLike(dss.build(bytes32("coins"), address(0)));
-        price = DSSLike(dss.build(bytes32("price"), address(0)));
+        coins = DSSLike(dss.build("coins", address(0)));
+        price = DSSLike(dss.build("price", address(0)));
 
         coins.bless();
         price.bless();
@@ -111,7 +111,7 @@ contract DSSToken is ERC721 {
         return count(tokenId).see();
     }
 
-    function count(uint256 tokenId) public view exists(tokenId) returns (DSSLike) {
+    function count(uint256 tokenId) public view returns (DSSLike) {
         return DSSLike(dss.scry(address(this), bytes32(tokenId), address(0)));
     }
 
@@ -139,7 +139,7 @@ contract DSSToken is ERC721 {
         returns (string memory)
     {
         return string.concat(
-            '{"name": "CounterDAO", "description": "I frobbed an Inc and all I got was this lousy token", "image": "',
+            '{"name": "CounterDAO", "description": "I frobbed an inc and all I got was this lousy token", "image": "',
             tokenSVG(tokenId).toDataURI("image/svg+xml"),
             '"}'
         );
