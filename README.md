@@ -12,17 +12,19 @@ makes use of several `DSS` counters:
 
 To `mint` your own `DSSToken`, call `mint` and send ether equal to the current `cost`.
 
-The minimum `cost` of a `DSSToken` is 0.01 ether. However, anyone may call `hike` and `drop` to modify the `cost` by 10%. If you choose to `mint`, consider using [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview).
+The minimum `cost` of a `DSSToken` is 0.01 ether. However, anyone may call `hike` and `drop` to modify the `cost` by 10%. If you choose to `mint`, consider using [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to avoid unwanted reverts.
 
 Additionally, `mint`, `hike`, and `drop` will distribute `CTR` governance token to
 the caller if a sufficient balance remains in the `DSSToken` contract.
 
-### Public functions:
+### View functions:
 - `cost`: Get the current `mint` price.
+- `see`: Read a token's counter.
+
+### Public functions:
 - `mint`: Mint a `DSSToken` to caller.
 - `hike`: Increase `cost` by 10%.
 - `drop`: Decrease `cost` by 10%.
-- `see`: Read a token's counter.
 
 ### Permissioned functions:
 - `hit`: Increment a token's counter. Token owner only.
