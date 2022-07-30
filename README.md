@@ -11,8 +11,9 @@ makes use of several `DSS` counters:
 - Each token has its own `count`, accessible to the token owner.
 
 To `mint` your own `DSSToken`, call `mint` and send ether equal to the current `cost`.
-The base `cost` of of a `DSSToken` is 0.01 ether. Note however that anyone may call
-`hike` and `drop` to modify the `cost`. (Consider using [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to `mint`).
+The base `cost` of a `DSSToken` is 0.01 ether.
+
+Note however that anyone may call `hike` and `drop` to modify the `cost` by 10%. (Consider using [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to `mint`).
 
 Additionally, `mint`, `hike`, and `drop` will distribute `CTR` governance token to
 the caller if a sufficient balance remains in the `DSSToken` contract.
