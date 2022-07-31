@@ -159,7 +159,7 @@ contract DSSToken is ERC721, DSNote {
         // Calculate cost to mint based on price counter value.
         // Price increases by 10% for each counter increment, i.e.:
         //
-        // cost = 0.01 ether * 1.01 ether ^ (counter value)
+        // cost = 0.01 ether * 1.1 ether ^ (counter value)
 
         return BASE_PRICE.mulWadUp(INCREASE.rpow(net, WAD));
     }
