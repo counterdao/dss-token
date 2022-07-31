@@ -34,3 +34,9 @@ Engineering Core Unit.
 ### Permissioned functions:
 - `hit`: Increment a token's counter. Token owner only.
 - `dip`: Decrement a token's counter. Token owner only.
+
+## Deployments
+
+## Mainnet
+
+- [`DSSToken`](https://etherscan.io/address/0xed15e2191a06086dd31ef0397c07ca40cb985abe): `0xed15e2191A06086DD31Ef0397C07Ca40cb985abE`
