@@ -7,7 +7,7 @@ import {DSSToken} from "../src/token.sol";
 
 contract DeployDSSToken is Script {
     function deployDSSToken(address dss, address ctr) public {
-        DSSToken token = new DSSToken(dss, ctr);
+        new DSSToken(dss, ctr);
     }
 
     function run() public {
