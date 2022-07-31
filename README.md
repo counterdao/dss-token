@@ -14,7 +14,7 @@ To `mint` your own `DSSToken`, call `mint` and send ether equal to the current `
 
 The minimum `cost` of a `DSSToken` is 0.01 ether. However, anyone may call `hike` and `drop` to modify the
 current `cost` by 10%. If you choose to `mint`, consider using
-[Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to avoid unwanted reverts.
+[Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to avoid unwanted reverts if the token price changes while your transaction is pending.
 
 Additionally, `mint`, `hike`, and `drop` will distribute `CTR` governance token to
 the caller if a sufficient balance remains in the `DSSToken` contract.
