@@ -88,8 +88,8 @@ library Render {
     function image(
         uint256 _tokenId,
         uint256 _supply,
-        Inc memory _price,
-        Inc memory _count
+        Inc memory _count,
+        Inc memory _price
     )
         internal
         pure
