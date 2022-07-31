@@ -1,7 +1,7 @@
 # dss-token
 ![Build Status](https://github.com/counterdao/dss-token/actions/workflows/.github/workflows/ci.yml/badge.svg?branch=main)
 
-## DSSToken — frob an inc, get this lousy token
+## DSSToken — frob an inc, get a dss-token
 
 `DSSToken` is an example ERC721 token that uses [dss](https://github.com/counterdao/dss). The contract
 makes use of several `DSS` counters:
@@ -12,10 +12,15 @@ makes use of several `DSS` counters:
 
 To `mint` your own `DSSToken`, call `mint` and send ether equal to the current `cost`.
 
-The minimum `cost` of a `DSSToken` is 0.01 ether. However, anyone may call `hike` and `drop` to modify the `cost` by 10%. If you choose to `mint`, consider using [Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to avoid unwanted reverts.
+The minimum `cost` of a `DSSToken` is 0.01 ether. However, anyone may call `hike` and `drop` to modify the
+current `cost` by 10%. If you choose to `mint`, consider using
+[Flashbots Protect](https://docs.flashbots.net/flashbots-protect/overview) to avoid unwanted reverts.
 
 Additionally, `mint`, `hike`, and `drop` will distribute `CTR` governance token to
 the caller if a sufficient balance remains in the `DSSToken` contract.
+
+Proceeds from `dss-token` will offset the cost of `dss` deployment and compensate the CounterDAO Protocol
+Engineering Core Unit.
 
 ### View functions:
 - `cost`: Get the current `mint` price.

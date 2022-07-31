@@ -20,6 +20,7 @@
 pragma solidity ^0.8.15;
 
 import {DSSLike} from "dss/dss.sol";
+import {DSNote} from "ds-note/note.sol";
 import {ERC721} from "solmate/tokens/ERC721.sol";
 import {FixedPointMathLib} from "solmate/utils/FixedPointMathLib.sol";
 
@@ -46,7 +47,7 @@ struct Inc {
     uint256 hop;
 }
 
-contract DSSToken is ERC721 {
+contract DSSToken is ERC721, DSNote {
     using FixedPointMathLib for uint256;
     using DataURI for string;
 
@@ -58,10 +59,10 @@ contract DSSToken is ERC721 {
     uint256 constant BASE_PRICE = 0.01 ether;
     uint256 constant INCREASE   = 1.1  ether;
 
-    DSSLike public immutable dss;
-    DSSLike public immutable coins;
-    DSSLike public immutable price;
-    CTRLike public immutable ctr;
+    DSSLike public immutable dss;   // DSS module
+    DSSLike public immutable coins; // Token ID counter
+    DSSLike public immutable price; // Token price counter
+    CTRLike public immutable ctr;   // CTR token
 
     address public owner;
 
@@ -86,87 +87,136 @@ contract DSSToken is ERC721 {
         dss = DSSLike(_dss);
         ctr = CTRLike(_ctr);
 
+        // Build a counter to track token IDs.
         coins = DSSLike(dss.build("coins", address(0)));
+
+        // Build a counter to track token price.
         price = DSSLike(dss.build("price", address(0)));
 
+        // Authorize core dss modules.
         coins.bless();
         price.bless();
 
+        // Initialize counters.
         coins.use();
         price.use();
     }
 
-    function mint() external payable {
+    /// @notice Mint a dss-token to caller. Must send ether equal to
+    /// current `cost`. Distributes 100 CTR to caller if a sufficient
+    /// balance is available in the contract.
+    function mint() external payable note {
         uint256 _cost = cost();
         if (msg.value != _cost) {
             revert WrongPayment(msg.value, _cost);
         }
 
+        // Increment token ID.
         coins.hit();
         uint256 id = coins.see();
 
+        // Build and initialize a counter associated with this token.
         DSSLike _count = DSSLike(dss.build(bytes32(id), address(0)));
         _count.bless();
         _count.use();
 
+        // Distribute 100 CTR to caller.
         _give(msg.sender, 100 * WAD);
         _safeMint(msg.sender, id);
     }
 
-    function hike() external {
+    /// @notice Increase `cost` by 10%. Distributes 10 CTR to caller
+    /// if a sufficient balance is available in the contract.
+    function hike() external note {
         if (price.see() < 100) {
+            // Increment price counter.
             price.hit();
             _give(msg.sender, 10 * WAD);
         }
     }
 
-    function drop() external {
+    /// @notice Decrease `cost` by 10%. Distributes 10 CTR to caller
+    /// if a sufficient balance is available in the contract.
+    function drop() external note {
         if (price.see() > 0) {
+            // Decrement price counter.
             price.dip();
             _give(msg.sender, 10 * WAD);
         }
     }
 
+    /// @notice Get cost to `mint` a dss-token.
+    /// @return Current `mint` price in wei.
     function cost() public view returns (uint256) {
         return cost(price.see());
     }
 
+    /// @notice Get cost to `mint` a dss-token for a given value
+    /// of the `price` counter.
+    /// @param net Value of the `price` counter.
+    /// @return `mint` price in wei.
     function cost(uint256 net) public pure returns (uint256) {
+        // Calculate cost to mint based on price counter value.
+        // Price increases by 10% for each counter increment, i.e.:
+        //
+        // cost = 0.01 ether * 1.01 ether ^ (counter value)
+
         return BASE_PRICE.mulWadUp(INCREASE.rpow(net, WAD));
     }
 
-    function hit(uint256 tokenId) external owns(tokenId) {
+    /// @notice Increment a token's counter. Only token owner.
+    /// @param tokenId dss-token ID.
+    function hit(uint256 tokenId) external owns(tokenId) note {
         count(tokenId).hit();
     }
 
-    function dip(uint256 tokenId) external owns(tokenId) {
+    /// @notice Decrement a token's counter. Only token owner.
+    /// @param tokenId dss-token ID
+    function dip(uint256 tokenId) external owns(tokenId) note {
         count(tokenId).dip();
     }
 
-    function pull(address dst) external auth {
+    /// @notice Withdraw ether balance from contract. Only contract owner.
+    /// @param dst Destination address.
+    function pull(address dst) external auth note {
         (bool ok,) = payable(dst).call{ value: address(this).balance }("");
         if (!ok) revert PullFailed();
     }
 
-    function swap(address guy) external auth {
+    /// @notice Change contract owner. Only contract owner.
+    /// @param guy New contract owner.
+    function swap(address guy) external auth note {
         owner = guy;
     }
 
+    /// @notice Read a token's counter value.
+    /// @param tokenId dss-token ID.
     function see(uint256 tokenId) external view returns (uint256) {
         return count(tokenId).see();
     }
 
+    /// @notice Get the DSSProxy for a token's counter.
+    /// @param tokenId dss-token ID.
     function count(uint256 tokenId) public view returns (DSSLike) {
+        // dss.scry returns the deterministic address of a DSSProxy contract for
+        // a given deployer, salt, and owner. Since we know these values, we
+        // don't need to write the counter address to storage.
         return DSSLike(dss.scry(address(this), bytes32(tokenId), address(0)));
     }
 
+    /// @notice Get the Inc for a DSSProxy address.
+    /// @param guy DSSProxy address.
     function inc(address guy) public view returns (Inc memory) {
+        // Get low level counter information from the Sum.
         SumLike sum = SumLike(dss.sum());
         (uint256 net, uint256 tab, uint256 tax, uint256 num, uint256 hop) =
             sum.incs(guy);
         return Inc(guy, net, tab, tax, num, hop);
     }
 
+    /// @notice Get URI for a dss-token.
+    /// @param tokenId dss-token ID.
+    /// @return base64 encoded Data URI string.
     function tokenURI(uint256 tokenId)
         public
         view
@@ -178,6 +228,9 @@ contract DSSToken is ERC721 {
         return tokenJSON(tokenId).toDataURI("application/json");
     }
 
+    /// @notice Get JSON metadata for a dss-token.
+    /// @param tokenId dss-token ID.
+    /// @return JSON metadata string.
     function tokenJSON(uint256 tokenId)
         public
         view
@@ -188,6 +241,9 @@ contract DSSToken is ERC721 {
         return Render.json(tokenId, tokenSVG(tokenId).toDataURI("image/svg+xml"), countInc);
     }
 
+    /// @notice Get SVG image for a dss-token.
+    /// @param tokenId dss-token ID.
+    /// @return SVG image string.
     function tokenSVG(uint256 tokenId)
         public
         view

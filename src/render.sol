@@ -47,7 +47,7 @@ library Render {
             '{"name": "CounterDAO',
             " #",
             utils.uint2str(_tokenId),
-            '", "description": "I frobbed an inc and all I got was this lousy token", "image": "',
+            '", "description": "I frobbed an inc and all I got was this lousy dss-token", "image": "',
             _svg,
             '", "attributes": ',
             attributes(_count),
